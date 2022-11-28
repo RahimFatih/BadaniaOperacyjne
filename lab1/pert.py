@@ -1,16 +1,19 @@
 
-import random
-import numpy
 class Task:
-    def __init__(self,name,time):
+    def __init__(self,name,a,m,b):
+        self.a=a
+        self.m=m
+        self.b=b
+        self.time=(a+4*m+b)/6
+        self.variant=((a-self.time)**2+4*((m-self.time)**2)+(b-self.time)**2)/6
         self.name=name
-        self.time=time
         self.ES=-1
-        self.EF=time
+        self.EF=self.time
         self.LS=-1
         self.LF=-1
         self.TF=0
         self.critical_path=[]
+
 
 
 class CPMAlgorithm:
@@ -18,16 +21,17 @@ class CPMAlgorithm:
         self.task_list=[]
         self.task_connections=[]
         self.max=0
+        self.project_variant=0
         pass
     def import_data(self,path):
         with open(path) as file:
             mylist = file.read().splitlines()
             N,M=mylist[0].split(" ")
-            tasks=mylist[1].split(" ")
+            tasks=mylist[1].split("   ")
             
             for count, task in enumerate(tasks):
-                self.task_list.append(Task(count,int(task)))
-            for connection in mylist[2].split("  "):
+                self.task_list.append(Task(count,int(task.split(" ")[0]),int(task.split(" ")[1]),int(task.split(" ")[2])))
+            for connection in mylist[2].split("   "):
                 self.task_connections.append([int(x) - 1 for x in connection.split(" ")])
             
             self.task_connections=sorted(self.task_connections, key=lambda x: (x[0], x[1]))
@@ -75,62 +79,26 @@ class CPMAlgorithm:
             if critical_path[-1].ES==0:
                 self.critical_path=critical_path
                 break
-        
+        self.project_variant=0
+        for task in self.critical_path:
+            self.project_variant+=task.variant
     def print_ELFS(self):
-        for task in self.task_list:
-            print("Name: "+str(task.name)+"   ES: ",task.ES, " EF: ", task.EF, " LS: ", task.LS, " LF: ", task.LF, " TF: ",task.TF  )
-
-        print("Max: ",self.max)
-        path="Critical path: start"
-    
+        path=""
         for task in self.critical_path[::-1]:
-            path=path +"->"+ str(task.name)
+            path=path +" "+ str(task.name)
+        print(len(self.critical_path),": ",path)
+        print(round(self.max,1)," ",round(self.project_variant,1))
+            
+
         print(path)
-
-class data_generator:
-    def __init__(self,n,m) -> None:
-        self.n=n
-        self.m=m
-        self.connection_list=[]
-        self.times=[]
-        connections=numpy.zeros([n,n],int)
-        for i in range(self.n):
-            self.times.append(str(random.randint(1,100)))
-        for i in range(self.m):
-            while True:
-                a=random.randint(0,n-2)
-                b=random.randint(a+1,n-1)
-                if connections[a, b]==0:
-                    connections[a,b]=1
-                    break
-
-        for i in range(m):
-            a=random.randint(0,n-1)
-            b=random.randint(0,n-1)
-            connections[:, [b, a]] = connections[:, [a, b]]
-            connections[[a, b]] = connections[[b, a]]
-        for i in range(n):
-            for j in range(n):
-                if connections[i,j]==1:
-                    self.connection_list.append(str(i)+' '+str(j))
-        pass
-    def import_to_file(self,file_name):
-        with open(file_name, 'w') as the_file:
-            the_file.write(str(self.n)+" "+str(self.m)+'\n')
-            the_file.write(' '.join(self.times)+'\n')
-            the_file.write('  '.join(self.connection_list))
-        
-
 
 
 
 
 
 if __name__ == "__main__":
-    gener=data_generator(100,200)
-    gener.import_to_file("test")
     alg=CPMAlgorithm()
-    alg.import_data("test")
+    alg.import_data("./lab1/pert_data.txt")
+    #alg.print_ELFS()
     alg.calculate_ELFS()
     alg.print_ELFS()
-
