@@ -1,6 +1,8 @@
 
 import random
 import numpy
+import time
+
 class Task:
     def __init__(self,name,time):
         self.name=name
@@ -62,7 +64,7 @@ class CPMAlgorithm:
         critical_tasks = list(filter(lambda x: x.TF == 0,self.task_list))
         critical_path=[]
         critical_path.append(max(critical_tasks,key=lambda x: x.EF))
-        print("-----------------------------",critical_path[-1].name)
+        #print("-----------------------------",critical_path[-1].name)
         while True:
             critical_task_EF=0
             critical_task=0
@@ -88,7 +90,7 @@ class CPMAlgorithm:
         print(path)
 
 class data_generator:
-    def __init__(self,n,m) -> None:
+    def __init__(self,n,m,mixer) -> None:
         self.n=n
         self.m=m
         self.connection_list=[]
@@ -104,7 +106,7 @@ class data_generator:
                     connections[a,b]=1
                     break
 
-        for i in range(m):
+        for i in range(mixer):
             a=random.randint(0,n-1)
             b=random.randint(0,n-1)
             connections[:, [b, a]] = connections[:, [a, b]]
@@ -127,10 +129,12 @@ class data_generator:
 
 
 if __name__ == "__main__":
-    gener=data_generator(100,200)
-    gener.import_to_file("test")
-    alg=CPMAlgorithm()
-    alg.import_data("test")
-    alg.calculate_ELFS()
-    alg.print_ELFS()
-
+    for i in range(2400,4000,50):
+        gener=data_generator(2000,i,i)
+        gener.import_to_file("test")
+        alg=CPMAlgorithm()
+        alg.import_data("test")
+        start=time.time()
+        alg.calculate_ELFS()
+        end=time.time()    
+        print(i," ",end-start)
