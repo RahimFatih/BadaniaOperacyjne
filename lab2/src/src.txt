@@ -1,0 +1,38 @@
+10
+  0  0  0  8  9  0  0  0  0  0
+  4  0  0  0  0  0  7  0  0  0
+  0  6  0  3  6  0  8  0  0  0
+  0  9  0  0  0  0  0  8  0  0
+  0  0  0  9  0  8  2  0  0  0
+  8  7  3  0  3  0  8  1  0  0
+  0  0  0  0  9  0  0  0  7  6
+  0  8  7  9  0  6  0  0  2  2
+  7  6  7  4  3  0  0  0  0  0
+  5  5  0  5  2  8  0  7  6  0
+
+
+NajkrĂłtsze ĹcieĹźki:
+  0 [0]
+ 17 [0, 3, 1]
+ 20 [0, 4, 5, 2]
+  8 [0, 3]
+  9 [0, 4]
+ 17 [0, 4, 5]
+ 11 [0, 4, 6]
+ 16 [0, 3, 7]
+ 18 [0, 3, 7, 8]
+ 17 [0, 4, 6, 9]
+
+
+Opis danych wejĹciowych:
+  Graf skierowany z dodatnimi wagami na krawÄdziach.
+  Pierwsza liczba N to liczba wierzchoĹkĂłw.
+  Kolejne N linii zawiera po N liczb.
+  Waga z wÄzĹa A do wÄzĹa B jest w wierszu A i kolumnie B
+  Waga 0 oznacza brak poĹÄczenia
+
+Opis NajkrĂłtsze ĹcieĹźki:
+  SÄ to najkrĂłtsze ĹcieĹźki z pierwszego do pozostaĹych wierzchoĹkĂłw.
+  Kolejne linie to opis ĹcieĹźki do kolejnych wierzchoĹkĂłw.
+  1 liczba oznacza dĹugoĹÄ ĹcieĹźki, -1 oznacza brak poĹÄczenia.
+  NastÄpnie nastÄpuje lista wierzchoĹkĂłw zawartych w ĹcieĹźce.
