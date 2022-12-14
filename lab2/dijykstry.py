@@ -1,7 +1,13 @@
 import numpy as np
+import random
 
 
-
+def connectionGenerator(n,m):
+    connectionMatrix = np.ones((n,n),int)
+    for i in range(n):
+        for j in range(n):
+            connectionMatrix[i][j]=random.randint(1,100) * (random.random()>m)
+    return(connectionMatrix)
 
 
 def Dijkstry(ConnectionMatrix):
@@ -38,6 +44,25 @@ def Dijkstry(ConnectionMatrix):
 
     print(d)
 
+def BellmanFord(ConnectionMatrix):
+    n=len(ConnectionMatrix[0])
+    Q=[*range(n)]#niezrelaksowane
+    S=[]#zrelaksowane
+    d=np.ones(n,int)*9999999
+    d[0]=0
+    p=np.ones(n,int)*(-1)
+    for relaxation in range(n-1):
+        change_flag=0
+        for i in range(n):
+            for j in range(n):
+                if ConnectionMatrix[i][j] !=0:
+                    if d[i]+ConnectionMatrix[i][j]<d[j]:
+                        d[j]=d[i]+ConnectionMatrix[i][j]
+                        p[j]=i
+                        change_flag=1
+        if change_flag==0:
+            break
+    print(d)
 if __name__ == "__main__":
     with open("./lab2/src/src.txt","r") as file:
         lines = file.readlines()
@@ -47,7 +72,9 @@ if __name__ == "__main__":
     #print(lines[i])
         for j in range(1,n+1):
             ConnectionMatrix[i-1][j-1]=int(lines[i].split("  ")[j])
+    ConnectionMatrix=connectionGenerator(10,0.5)
     Dijkstry(ConnectionMatrix)
-
+    BellmanFord(ConnectionMatrix)
+    
 
 
