@@ -1,12 +1,12 @@
 import numpy as np
 import random
-
+import time
 
 def connectionGenerator(n,m):
     connectionMatrix = np.ones((n,n),int)
     for i in range(n):
         for j in range(n):
-            connectionMatrix[i][j]=random.randint(1,100) * (random.random()>m)
+            connectionMatrix[i][j]=random.randint(1,100) * (random.random()<m)
     return(connectionMatrix)
 
 
@@ -25,7 +25,8 @@ def Dijkstry(ConnectionMatrix):
             if d[u] < minD:
                 minD=d[u]
                 minU=u
-        S.append(Q.pop(Q.index(minU)))
+        if minU>-1:
+            S.append(Q.pop(Q.index(minU)))
         for u in range(n):
             if ConnectionMatrix[minU][u]>0:
                 if d[u]>d[minU]+ConnectionMatrix[minU][u]:
@@ -40,9 +41,8 @@ def Dijkstry(ConnectionMatrix):
             current_node=p[current_node]
             path_to_i.insert(0,current_node)
         path_list.append(path_to_i)
-    print(path_list)
-
-    print(d)
+    
+    
 
 def BellmanFord(ConnectionMatrix):
     n=len(ConnectionMatrix[0])
@@ -62,19 +62,40 @@ def BellmanFord(ConnectionMatrix):
                         change_flag=1
         if change_flag==0:
             break
-    print(d)
+    
 if __name__ == "__main__":
-    with open("./lab2/src/src.txt","r") as file:
-        lines = file.readlines()
-    n = int(lines[0])
-    ConnectionMatrix=np.zeros((n,n),int)
-    for i in range(1,n+1):
-    #print(lines[i])
-        for j in range(1,n+1):
-            ConnectionMatrix[i-1][j-1]=int(lines[i].split("  ")[j])
-    ConnectionMatrix=connectionGenerator(10,0.5)
-    Dijkstry(ConnectionMatrix)
-    BellmanFord(ConnectionMatrix)
+    #with open("./lab2/src/src.txt","r") as file:
+    #    lines = file.readlines()
+    #n = int(lines[0])
+    #ConnectionMatrix=np.zeros((n,n),int)
+    #for i in range(1,n+1):
+    ##print(lines[i])
+    #    for j in range(1,n+1):
+    #        ConnectionMatrix[i-1][j-1]=int(lines[i].split("  ")[j])
+    
+#    for m in np.arange(0.1,1,0.1): 
+#        for n in range(10,1010,20):
+#            ConnectionMatrix=connectionGenerator(n,m)
+#            start=time.time()
+#            Dijkstry(ConnectionMatrix)
+#            end_dijkstry=time.time()
+#            BellmanFord(ConnectionMatrix)
+#            end_bellmana = time.time()
+#            print(round(m,1)," ",round(n))
+#            with open("wyniki.txt","a") as file:
+#                file.write(str(round(m,1))+" "+str(round(n))+" "+str(round(end_dijkstry-start,6))+" "+str(round(end_bellmana-end_dijkstry,6))+"\n")
+#
     
 
-
+    m=0.9
+    for n in range(1010,2010,20):
+        ConnectionMatrix=connectionGenerator(n,m)
+        start=time.time()
+        Dijkstry(ConnectionMatrix)
+        end_dijkstry=time.time()
+        BellmanFord(ConnectionMatrix)
+        end_bellmana = time.time()
+        print(round(m,1)," ",round(n))
+        with open("wyniki.txt","a") as file:
+            file.write(str(round(m,1))+" "+str(round(n))+" "+str(round(end_dijkstry-start,6))+" "+str(round(end_bellmana-end_dijkstry,6))+"\n")
+    
